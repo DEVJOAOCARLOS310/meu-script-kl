@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local VirtualUser = game:GetService("VirtualUser")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local player = Players.LocalPlayer
+local player = Players.LocalPlayer or Players.PlayerAdded:Wait()
 
 local state = {
 	autoFarmLevel = false,
@@ -105,14 +105,19 @@ local progressionTable = {
 	{ min = 4875, max = 5450, sea = 3, island = "Land of Detention",    questNpc = "Quest", mob = "Jailer",           goalCount = 4, bosses = { { lvl = 4950, names = { "Chief Warden", "Luma" } } } },
 }
 
-local guiParent = player:WaitForChild("PlayerGui")
+local guiParent = player:FindFirstChild("PlayerGui") or player:WaitForChild("PlayerGui", 10)
+if not guiParent then return end
+
 if guiParent:FindFirstChild("KL_MinimalSquare") then
-	guiParent.KL_MinimalSquare:Destroy()
+	pcall(function()
+		guiParent.KL_MinimalSquare:Destroy()
+	end)
 end
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "KL_MinimalSquare"
 screenGui.ResetOnSpawn = false
+screenGui.IgnoreGuiInset = true
 screenGui.Parent = guiParent
 
 local mainFrame = Instance.new("Frame")
@@ -261,22 +266,4 @@ addCheck("BOSS/SEA", "Farm Hydra", "farmHydra")
 addCheck("BOSS/SEA", "Farm Bosses Gerais", "farmAllBosses")
 addCheck("BOSS/SEA", "Hop Sea King (1h/4h/5h)", "hopSeaKing")
 addCheck("BOSS/SEA", "Hop Hydra (3h/6h)", "hopHydra")
-addCheck("BOSS/SEA", "Hop Bosses 3rd Sea", "hopThirdSeaBoss")
-
-addCheck("PVP/HOP", "Auto Combate (PvP Ativo)", "autoPvpHunt")
-addCheck("PVP/HOP", "Hop Alvos PvP", "hopPvpTarget")
-addCheck("PVP/HOP", "Hop Bandeira de Clas", "hopClanFlag")
-
-addCheck("UPGRADE", "Auto Armas V2", "autoWeaponV2")
-addCheck("UPGRADE", "Auto Raca V2", "autoRaceV2")
-addCheck("UPGRADE", "Auto Raca V3", "autoRaceV3")
-addCheck("UPGRADE", "Auto Estilo: Gale", "autoStyleGale")
-addCheck("UPGRADE", "Auto Estilo: Trickster", "autoStyleTrickster")
-
-addCheck("FRUTA/TP", "Bring Fruta Dropada", "bringFruit")
-addCheck("FRUTA/TP", "Auto Store Fruta", "autoStoreFruit")
-addCheck("FRUTA/TP", "Auto Trocar Fruta por Key", "autoTradeFruitKey")
-
-local lastQuestAttempt = 0
-
-local function
+addCheck("BOSS/SEA", "Hop
